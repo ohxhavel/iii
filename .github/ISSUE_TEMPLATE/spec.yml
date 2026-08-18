@@ -1,0 +1,63 @@
+name: Tech-spec epic
+description: Track implementation of a spec in tech-specs/. One epic per spec folder.
+title: "[spec] "
+labels: ["type/spec", "upstream/roadmap"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        `tech-specs/` stays the source of truth for roadmap **content** — this epic tracks
+        **execution**. Do not restate the spec here; link it and list its contracts.
+
+  - type: input
+    id: spec
+    attributes:
+      label: Spec folder
+      description: Path under tech-specs/, e.g. `tech-specs/2026-07-14-worker-compose/`
+      placeholder: tech-specs/<date>-<slug>/
+    validations:
+      required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: The load-bearing idea in a short paragraph — enough to triage without opening the spec.
+    validations:
+      required: true
+
+  - type: textarea
+    id: contracts
+    attributes:
+      label: Contracts
+      description: One line per contract doc in the spec. Each becomes a sub-issue.
+      value: |
+        - [ ] `<doc>.md` — 
+        - [ ] `<doc>.md` — 
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - engine
+        - sdk
+        - console
+        - docs
+        - website
+        - ci
+        - crates
+    validations:
+      required: true
+
+  - type: textarea
+    id: done
+    attributes:
+      label: Definition of done
+      value: |
+        - [ ] All contract sub-issues closed
+        - [ ] Spec frontmatter `status:` moved from `draft` to `live`
+    validations:
+      required: true

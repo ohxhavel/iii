@@ -56,6 +56,10 @@ Thumbs.db
 .claude/
 .planning/
 .gstack/
+# AGENTS.md and CLAUDE.md (below) are force-tracked with `git add -f` as shared,
+# reviewed agent documentation. These entries are inert for the committed copies
+# — an ignore rule does not apply to a file git already tracks — and are kept so
+# a contributor's own local variant stays untracked in other checkouts.
 AGENTS.md
 !website/public/AGENTS.md
 
@@ -83,6 +87,7 @@ TODOS.md
 
 # Per-contributor coding-agent state (not tracked)
 .serena/
+# Force-tracked as shared documentation — see the note under "AI tools" above.
 CLAUDE.md
 
 # Impeccable editor hook cache

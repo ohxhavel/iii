@@ -1,0 +1,51 @@
+name: Docs
+description: A documentation gap, inaccuracy, or drift between docs and code.
+title: "[docs] "
+labels: ["type/docs", "area/docs"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Author under `docs/next/` — that folder is what a stable release promotes. Generated trees
+        (`docs/*/cli-reference/`, `docs/docs.json`) are regenerated, never hand-edited.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is wrong or missing
+      description: Quote the current text if it is inaccurate, and say what it should say.
+    validations:
+      required: true
+
+  - type: input
+    id: location
+    attributes:
+      label: Location
+      description: Path to the file, or the published URL.
+      placeholder: docs/next/how-to/schedule-cron-task.mdx
+    validations:
+      required: true
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Divio quadrant
+      description: Which kind of doc this is. See .cursor/rules/docs.mdc.
+      options:
+        - Tutorial (learning-oriented)
+        - How-to guide (problem-oriented)
+        - Reference (information-oriented)
+        - Explanation (understanding-oriented)
+        - Not a docs-site page (README, AGENTS.md, CLAUDE.md, ...)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: track
+    attributes:
+      label: Track
+      options:
+        - upstream/roadmap
+        - fork/work
+    validations:
+      required: true

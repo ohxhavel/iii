@@ -3,8 +3,10 @@
 Guidance for Claude Code and other coding agents working in the **iii** monorepo.
 
 `AGENTS.md` is the short version of this file and stays in sync with it. `CONTRIBUTING.md` covers
-licensing of contributions, `.github/workflows/WORKFLOWS.md` covers CI/CD in depth, and
-`docs/RELEASING.md` covers docs versioning.
+licensing of contributions, `.github/workflows/WORKFLOWS.md` covers CI/CD in depth,
+`docs/RELEASING.md` covers docs versioning, and `.github/PROJECT.md` covers issue tracking — the
+label taxonomy, how a spec becomes an epic, and the board itself at
+<https://github.com/users/ohxhavel/projects/23> (private; the issues it tracks are public).
 
 ## What this repo is
 
