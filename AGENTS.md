@@ -1,8 +1,24 @@
 # AGENTS.md
 
-You are working in the iii monorepo — a backend unification engine with three primitives: **Function**, **Trigger**, **Worker**. The engine is Rust. SDKs exist for TypeScript, Python, and Rust. All communicate over WebSocket.
+You are working in the iii monorepo — a backend unification engine with three primitives: **Function**, **Trigger**, **Worker**. The engine is Rust. SDKs exist for TypeScript, Python, Rust, and Go. All communicate over WebSocket.
+
+For the long form of everything below — engine layout, testing setup, CI gates, docs versioning, release flow — see [CLAUDE.md](CLAUDE.md).
 
 ## Commands
+
+The `Makefile` mirrors the CI jobs and is the shortest path to a green build:
+
+```bash
+make install                     # pnpm install + uv sync (Python SDK)
+make install-hooks               # pre-commit cargo fmt check
+make fix                         # auto-format and auto-fix lint, all languages
+make check                       # lint + fmt + typecheck + build
+make ci-local                    # everything CI runs
+make cli-docs                    # regenerate docs/next/cli-reference/ (CI fails if stale)
+make engine-up / engine-down     # test engine for SDK integration tests
+```
+
+The underlying tools:
 
 ```bash
 # Setup
@@ -19,6 +35,8 @@ cargo test                       # all Rust tests
 cargo test -p iii                 # engine only
 cargo test -p iii-sdk             # Rust SDK only
 cd sdk/packages/python/iii && uv sync --extra dev && uv run pytest  # Python SDK
+cd sdk/packages/go/iii && go test ./...                            # Go SDK
+make engine-test                 # engine suite (installs iii-worker to PATH first)
 
 # Lint & Format
 pnpm fmt                         # format JS/TS (Biome)
@@ -33,7 +51,7 @@ pnpm dev:console                  # console frontend dev server
 pnpm dev:docs                     # docs dev server (Mintlify)
 pnpm dev:website                  # website dev server
 
-# Cloud
+# Cloud — passthrough to the external iii-cloud binary (iii-hq/iii-cloud-cli)
 iii cloud deploy --config <path>  # deploy to iii Cloud
 iii cloud list                    # list deployments
 iii cloud update <deployment-id>  # update a deployment
@@ -43,21 +61,24 @@ iii cloud delete <deployment-id>  # delete a deployment
 ## Project Map
 
 ```
-engine/                          Rust engine — runtime, modules, protocol, CLI
+engine/                          Rust engine — runtime, built-in workers, protocol, CLI
+crates/                          Supporting Rust crates — sandbox/VM runtime, tooling, scaffolding
 sdk/packages/node/iii/           TypeScript SDK (npm: iii-sdk)
 sdk/packages/node/iii-browser/   Browser SDK (npm: iii-browser-sdk)
 sdk/packages/python/iii/         Python SDK (PyPI: iii-sdk)
 sdk/packages/rust/iii/           Rust SDK (crates.io: iii-sdk)
+sdk/packages/go/iii/             Go SDK (github.com/iii-hq/iii/sdk/packages/go/iii)
 console/                         Developer console (React + Rust)
-skills/                          26 agent skills (auto-discovered by SkillKit)
-docs/                            Documentation site (Mintlify/MDX)
+skills/                          Agent skills (auto-discovered by SkillKit)
+docs/                            Documentation site (Mintlify/MDX) — author under docs/next/
 website/                         iii.dev website
-website/presentations/           Tech-spec presentations site (iii.dev/tech-specs/) — SOP in its README
+website/roadmap/                 Tech-spec decks and site tooling (iii.dev/roadmap/) — SOP in its README
 tech-specs/                      Markdown-only specs; frontmatter in each README.md lists it on the site
 scripts/                         Build and CI scripts
+infra/                           Terraform for the website/CDN
 ```
 
-**Workspaces:** `Cargo.toml` (Rust), `pnpm-workspace.yaml` (JS/TS), `turbo.json` (build orchestration).
+**Workspaces:** `Cargo.toml` (Rust), `pnpm-workspace.yaml` (JS/TS), `turbo.json` (build orchestration). Every manifest is versioned in lockstep — never bump one on its own.
 
 ## Boundaries
 
@@ -75,7 +96,7 @@ scripts/                         Build and CI scripts
 
 ### Ask First
 
-- Changes to public SDK APIs (npm/PyPI/crates.io surface)
+- Changes to public SDK APIs (npm/PyPI/crates.io/Go module surface)
 - Changes to engine config schema (`engine/config.yaml`)
 - Changes to CI/CD workflows (`.github/`)
 - Adding new engine modules
@@ -162,7 +183,9 @@ iii.register_trigger({
 
 ## Skills
 
-The `skills/` directory contains 26 agent skills (iii-prefixed) auto-discovered by `npx skills add iii-hq/iii` and `npx skillkit install iii-hq/iii`. Reference implementations live in `skills/references/` with TypeScript, Python, and Rust variants.
+The `skills/` directory contains six knowledge skills — `iii-getting-started`, `iii-core-primitives`, `iii-sdk-reference`, `iii-engine-config`, `iii-architecture-patterns`, `iii-error-handling` — plus the `presentation` tool skill. Install with `npx skills add iii-hq/iii/skills` (add `--skill <name>` for one).
+
+Worker-specific capability skills deliberately live with their workers in [iii-hq/workers](https://github.com/iii-hq/workers), not here. Do not duplicate queue, pub/sub, state, cron, stream, or observability material into `skills/`.
 
 ## Blog (agent knowledge base)
 
