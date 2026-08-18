@@ -1,0 +1,81 @@
+name: Design item
+description: A surface that needs designing before (or alongside) implementation.
+title: "[design] "
+labels: ["type/design"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Design items are specced here, drawn as a **Claude Design canvas**, then the published
+        canvas URL is pasted back into the *Design artifact* field below. Implementation issues
+        link to this one — see [PROJECT.md](https://github.com/ohxhavel/iii/blob/main/.github/PROJECT.md).
+
+  - type: input
+    id: surface
+    attributes:
+      label: Surface
+      description: What is being designed, and where it lives in the product.
+      placeholder: Console — contributed page shell (`pages` slot)
+    validations:
+      required: true
+
+  - type: textarea
+    id: job
+    attributes:
+      label: User and job
+      description: Who is looking at this, and what they are trying to get done.
+      placeholder: A worker author who wants their own page to look native inside the console ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: states
+    attributes:
+      label: States to cover
+      description: Every state the design must answer for. Empty and error states are part of the job, not a follow-up.
+      value: |
+        - [ ] Default / populated
+        - [ ] Empty
+        - [ ] Loading
+        - [ ] Error
+        - [ ] Narrow viewport
+    validations:
+      required: true
+
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Constraints
+      description: Existing components, tokens, or contracts the design must live within.
+      placeholder: |
+        Shares the console's React instance and component library — Radix primitives in
+        console/packages/console-frontend/src/components/ui, Tailwind tokens, no iframes.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: track
+    attributes:
+      label: Track
+      options:
+        - upstream/roadmap
+        - fork/work
+    validations:
+      required: true
+
+  - type: input
+    id: artifact
+    attributes:
+      label: Design artifact
+      description: Claude Design canvas URL. Leave blank until the canvas exists, then edit it in.
+      placeholder: (none yet)
+    validations:
+      required: false
+
+  - type: textarea
+    id: references
+    attributes:
+      label: References
+      description: Spec docs, existing screens, or prior art worth looking at first.
+    validations:
+      required: false

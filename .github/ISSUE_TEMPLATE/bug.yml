@@ -1,0 +1,80 @@
+name: Bug
+description: Something behaves differently from what the docs or the spec say.
+title: "[bug] "
+labels: ["type/bug"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened
+      description: One or two sentences. Paste the error verbatim if there is one.
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Exact commands. Include the engine config if the behaviour depends on it.
+      value: |
+        1. 
+        2. 
+        3. 
+      render: markdown
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs actual
+      description: What you expected, and what you got instead.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - engine
+        - sdk
+        - console
+        - docs
+        - website
+        - ci
+        - crates
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Output of `iii --version`, or the SDK version in your manifest.
+      value: 0.23.0-rc.1
+    validations:
+      required: true
+
+  - type: dropdown
+    id: language
+    attributes:
+      label: SDK language
+      description: Leave as n/a for engine-only or console-only bugs.
+      options:
+        - n/a
+        - TypeScript / Node
+        - Python
+        - Rust
+        - Go
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Relevant engine or worker output. `RUST_LOG=debug` helps for engine issues.
+      render: shell
+    validations:
+      required: false

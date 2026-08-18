@@ -1,0 +1,79 @@
+name: Feature
+description: Propose a change or addition to the engine, an SDK, the console, or tooling.
+title: "[feature] "
+labels: ["type/feature"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What is hard, missing, or wrong today? Describe the situation, not the solution.
+      placeholder: Workers can only run on the machine the engine runs on, so ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: What should exist instead. Name the primitives it touches — Worker, Trigger, Function.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      description: Where the change lands. Add the matching `area/*` label after filing.
+      options:
+        - engine
+        - sdk
+        - console
+        - docs
+        - website
+        - ci
+        - crates
+    validations:
+      required: true
+
+  - type: dropdown
+    id: track
+    attributes:
+      label: Track
+      description: Upstream iii direction, or work specific to this fork.
+      options:
+        - upstream/roadmap
+        - fork/work
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: How a reviewer confirms this is done. One checkbox per verifiable outcome.
+      value: |
+        - [ ] 
+        - [ ] 
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Prior art, linked specs, constraints, anything a reviewer should know.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: gates
+    attributes:
+      label: Ask-first surfaces
+      description: CLAUDE.md requires agreement before these change. Tick any this touches.
+      options:
+        - label: Public SDK API surface (npm / PyPI / crates.io / Go module)
+        - label: Engine config schema (`engine/config.yaml`)
+        - label: The WebSocket protocol between SDKs and engine
+        - label: New engine modules or built-in workers
+        - label: CI/CD workflows under `.github/`

@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Contributing guide
+    url: https://github.com/ohxhavel/iii/blob/main/CONTRIBUTING.md
+    about: Licensing of contributions, dev environment setup, and the PR process.
+  - name: Project conventions
+    url: https://github.com/ohxhavel/iii/blob/main/.github/PROJECT.md
+    about: Label taxonomy, board fields and views, and how a spec becomes an epic.
+  - name: iii Discord
+    url: https://discord.gg/iiidev
+    about: Questions and discussion that are not yet a tracked work item.
