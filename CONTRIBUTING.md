@@ -61,8 +61,12 @@ their behalf, or your employer must have waived such rights for your contributio
 
 ### Prerequisites
 
-- Rust 1.80+ (edition 2024)
-- Redis (only if you enable the event/cron/stream workers)
+- **Rust** 1.80+ (edition 2024), via [rustup](https://rustup.rs/)
+- **Node.js** >= 20 with **pnpm** >= 10 — the SDKs, console, docs, and website
+- **Python** >= 3.10 with **uv** — the Python SDK
+- **Redis**, only if you enable the event/cron/stream workers
+
+Use `pnpm`, never `npm`.
 
 ### Setting Up Your Development Environment
 
@@ -72,15 +76,21 @@ their behalf, or your employer must have waived such rights for your contributio
    git clone https://github.com/<your-username>/iii.git
    cd iii
    ```
-3. Create a branch for your changes:
+3. Install dependencies and the pre-commit hook:
+   ```bash
+   make install        # pnpm install + uv sync for the Python SDK
+   make install-hooks  # runs cargo fmt --check before each commit
+   ```
+4. Create a branch for your changes:
    ```bash
    git checkout -b my-feature
    ```
-4. Make your changes and verify they build and pass lint:
+5. Make your changes, then verify them the way CI will:
    ```bash
-   cargo fmt
-   cargo clippy -- -D warnings
+   make fix    # auto-format and auto-fix lint, all languages
+   make check  # lint + format + typecheck + build
    ```
+   `make ci-local` runs the whole CI set locally if you want the full gate.
 
 ### License Headers
 
@@ -115,9 +125,9 @@ list changes).
 3. Include tests for new functionality where applicable.
 4. Run formatting and lint checks before submitting:
    ```bash
-   cargo fmt
-   cargo clippy -- -D warnings
+   make check
    ```
+   If you only touched Rust, `cargo fmt` and `cargo clippy -- -D warnings` cover it.
 5. Open a pull request against `main` with a description of what you changed and why.
 6. Be responsive to feedback during code review.
 
@@ -139,30 +149,22 @@ an issue for discussion.
 
 This is a unified monorepo containing the iii Engine, SDKs, Console, documentation, and website.
 
-## Prerequisites
-
-- **Rust** (stable, via [rustup](https://rustup.rs/))
-- **Node.js** >= 20 with **pnpm** >= 10
-- **Python** >= 3.10 with **uv**
-
-## Getting Started
-
-```bash
-# Install JS/TS dependencies
-pnpm install
-
-# Build everything (JS/TS via Turborepo)
-pnpm build
-
-# Build Rust workspace (engine + SDK + console)
-cargo build --release
-
-# Install the pre-commit hook (runs `cargo fmt --check` before each commit
-# so that CI's format gate never bites mid-PR). Optional but recommended.
-make install-hooks
-```
+Prerequisites and setup are covered once, under
+[Getting Started](#setting-up-your-development-environment) above.
 
 ## Development Commands
+
+The `Makefile` is the primary entry point: its targets mirror the CI jobs, so a green `make`
+locally means a green CI.
+
+| Command            | Description                                               |
+| ------------------ | --------------------------------------------------------- |
+| `make install`     | pnpm install + uv sync for the Python SDK                 |
+| `make fix`         | Auto-format and auto-fix lint across all languages        |
+| `make check`       | Lint + format + typecheck + build                         |
+| `make ci-local`    | Everything CI runs: engine, all four SDKs, console        |
+| `make engine-test` | Engine suite — installs `iii-worker` to PATH first        |
+| `make cli-docs`    | Regenerate `docs/next/cli-reference/` (CI fails if stale) |
 
 ### Root-level (orchestrated)
 
