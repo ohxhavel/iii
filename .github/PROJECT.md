@@ -5,7 +5,13 @@ source of truth for roadmap **content**, and `docs/` for user-facing documentati
 
 ## Board
 
-One GitHub Project, board layout, with these fields:
+**https://github.com/users/ohxhavel/projects/23**
+
+The project is user-owned, so it is private by default even though this repository is public — the
+link above 404s for anyone without access. Making it public is a choice, not a requirement; the
+issues themselves are public either way.
+
+Board layout, with these fields:
 
 | Field      | Values                                  |
 | ---------- | --------------------------------------- |
@@ -74,8 +80,8 @@ template lists them as a checklist for that reason.
 
 ## Repository prerequisites
 
-Issues are disabled by default on forks. Enable them at **Settings → General → Features → Issues**
-before filing anything.
+Issues are enabled. (GitHub disables them on forks by default, so a fresh fork of this repo needs
+**Settings → General → Features → Issues** ticked before anything can be filed.)
 
 Labels behave differently depending on how the issue is filed, and the difference bites:
 
