@@ -75,5 +75,15 @@ template lists them as a checklist for that reason.
 ## Repository prerequisites
 
 Issues are disabled by default on forks. Enable them at **Settings → General → Features → Issues**
-before filing anything, and create the labels above (Issues → Labels) so the templates can apply
-them — GitHub silently drops a template label that does not yet exist.
+before filing anything.
+
+Labels behave differently depending on how the issue is filed, and the difference bites:
+
+| Filed via | Missing label |
+| --------- | ------------- |
+| REST/GraphQL API (agents, `gh issue create`) | **Created on demand**, with the default grey `#ededed` and no description |
+| An issue-form template's `labels:` field | **Silently dropped** — the issue arrives without it |
+
+So a label only reliably exists once something has applied it through the API, or someone created
+it by hand. Seeding created all of the above except `type/bug` and `area/website`; create those two
+before relying on the bug template, or the label will not stick.
