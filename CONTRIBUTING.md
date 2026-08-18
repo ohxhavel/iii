@@ -132,6 +132,11 @@ list changes).
 
 If you have questions about contributing, licensing, or anything else, feel free to open
 an issue for discussion.
+
+---
+
+# Monorepo Reference
+
 This is a unified monorepo containing the iii Engine, SDKs, Console, documentation, and website.
 
 ## Prerequisites
@@ -229,35 +234,50 @@ All CI/CD runs from `.github/workflows/`.
 
 ### CI (`ci.yml`)
 
-Runs on every push/PR to `main`. Change detection determines which jobs to run:
+Runs on every push/PR to `main`. The workflow as a whole is skipped for documentation-only
+changes (`paths-ignore` covers `docs/**`, `skills/**`, `website/**`, `.cursor/**`, and all
+`*.md`/`*.mdx`). Otherwise every job runs, with two exceptions scoped by the `changes` job:
+`engine-coverage` (PRs only when `engine/**`, `crates/**`, or the Cargo manifests change) and
+`engine-benches` (only when bench sources change).
 
-- **Engine changes** trigger: engine tests, all SDK tests, console build
-- **SDK Node changes** trigger: SDK Node tests
-- **SDK Python changes** trigger: SDK Python tests
-- **SDK Rust changes** trigger: SDK Rust tests, engine tests, console build
-- **Console/Docs/Website changes** trigger only their own tests/builds
+The engine is built from source in CI (not downloaded as a release binary) and uploaded as an
+artifact, so the SDK jobs always test against the current engine code.
 
-The engine is built from source in CI (not downloaded as a release binary), so SDK tests always validate against the current engine code.
+The full job list and what each one checks is in
+[`.github/workflows/WORKFLOWS.md`](.github/workflows/WORKFLOWS.md).
 
-### Release (`release.yml`)
+### Release (`release-iii.yml`)
 
-Triggered by pushing a `release/v*` tag. Executes sequentially:
+Triggered by pushing an `iii/v*` tag. It creates the GitHub Release and then fans out:
 
-1. Run all tests
-2. Build and release engine binaries (GitHub Release)
-3. Publish SDKs (npm, PyPI, crates.io)
-4. Build and release console binaries
-5. Trigger package manager workflows (Homebrew, etc.)
+1. Engine binaries across the release targets, then the Docker image and Homebrew formula
+2. Console frontend and binaries
+3. SDK publishes — npm, PyPI, crates.io, and the Go module tag
+4. Built-in workers and their skills to the workers registry
+5. Downstream smoke and quickstart validations
 
 ### Creating a Release
 
-```bash
-git tag release/v0.7.0
-git push origin release/v0.7.0
-```
+Releases are workflow-driven — do not tag by hand. Run the **Create Tag** workflow
+(`create-tag.yml`) from the Actions tab on `main` with:
 
-For pre-releases, add a suffix: `release/v0.7.0-alpha`, `release/v0.7.0-beta`, `release/v0.7.0-rc`.
+| Input        | Value                                |
+| ------------ | ------------------------------------ |
+| `target`     | `iii`                                |
+| `bump`       | `patch`, `minor`, or `major`         |
+| `prerelease` | `none` for a stable release, or `rc` |
+| `dry_run`    | `true` to rehearse first             |
+
+It bumps every manifest in lockstep, rotates the docs on stable releases (see
+[docs/RELEASING.md](docs/RELEASING.md)), and pushes the `iii/v{version}` tag that triggers the
+release pipeline.
+
+To publish a prerelease from a feature branch without touching `main`, use `alpha-release.yml`,
+which tags `iii-alpha/v*` in its own namespace.
 
 ## Project Structure
 
-See [STRUCTURE.md](STRUCTURE.md) for the full directory layout and dependency chain.
+The directory layout and dependency chain are documented above and in the
+[Repository Structure table](README.md#repository-structure) in the README. Each top-level
+directory has its own README: [engine/](engine/README.md), [sdk/](sdk/README.md),
+[console/](console/README.md), [skills/](skills/README.md), [docs/](docs/README.md).

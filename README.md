@@ -180,7 +180,9 @@ triggers, queues, traces, logs, and real-time state. See the
 | `website/` | iii website                                             | [website/](website/)                   |
 | `docs/`    | Documentation site (Mintlify/MDX)                       | [docs/README.md](docs/README.md)       |
 
-See [STRUCTURE.md](STRUCTURE.md) for the full monorepo layout, dependency chain, and CI/CD details.
+See [CONTRIBUTING.md](CONTRIBUTING.md#monorepo-reference) for the full monorepo layout, development
+commands, and dependency chain, and
+[.github/workflows/WORKFLOWS.md](.github/workflows/WORKFLOWS.md) for CI/CD details.
 
 ## Examples
 
